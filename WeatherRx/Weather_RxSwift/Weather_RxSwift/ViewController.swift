@@ -28,29 +28,29 @@ class ViewController: UIViewController {
         
         // search로 선언하면 모든 label의 값을 subscribe로 한번에 관리하는 것이 아니라 아래처럼 각 라벨별로 분리해서 관리가 가능하다. (코드가 길지 않아 가독성에도 좋음)
         
-        let search = searchCityName.rx.text
+        let search = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
+            .map { self.searchCityName.text }
             .filter { ($0 ?? "").count > 0 }
             .flatMapLatest { text in
                 return APIController.shared.currentWeather(city: text ?? "Error")
                     .catchAndReturn(APIController.Weather.empty)
             }
-            .share(replay: 1)
-            .observe(on: MainScheduler.instance)
+            .asDriver(onErrorJustReturn: APIController.Weather.empty)
         
         search.map { "\($0.temp)°C" }
-            .bind(to: temperatureLabel.rx.text)
+            .drive(temperatureLabel.rx.text)
             .disposed(by: bag)
         
         search.map { $0.icon }
-            .bind(to: iconLabel.rx.text)
+            .drive(iconLabel.rx.text)
             .disposed(by: bag)
         
         search.map { "\($0.humidity)%" }
-            .bind(to: humidityLabel.rx.text)
+            .drive(humidityLabel.rx.text)
             .disposed(by: bag)
         
         search.map { $0.cityName }
-            .bind(to: cityNameLabel.rx.text)
+            .drive(cityNameLabel.rx.text)
             .disposed(by: bag)
     }
     

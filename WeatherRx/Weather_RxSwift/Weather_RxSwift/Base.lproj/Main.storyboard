@@ -40,20 +40,23 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i9h-16-zOp">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="City's Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i9h-16-zOp">
                                 <rect key="frame" x="16" y="81" width="361" height="49.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="33"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mrH-Ao-iyN">
+                                <rect key="frame" x="186.66666666666666" y="428.66666666666669" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="oCn-sU-bGn" firstAttribute="centerY" secondItem="WBe-W0-E1S" secondAttribute="centerY" id="37U-SX-EhV"/>
                             <constraint firstItem="OX9-dL-W0E" firstAttribute="top" secondItem="oCn-sU-bGn" secondAttribute="bottom" constant="170" id="4N8-zr-666"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="i9h-16-zOp" secondAttribute="trailing" constant="16" id="98d-vr-Gdi"/>
                             <constraint firstItem="i9h-16-zOp" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="9GA-OJ-6xF"/>
                             <constraint firstItem="oCn-sU-bGn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WBe-W0-E1S" secondAttribute="trailing" constant="8" symbolic="YES" id="Bwj-PZ-XiW"/>
+                            <constraint firstItem="mrH-Ao-iyN" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="EZT-hH-m3Q"/>
                             <constraint firstItem="i9h-16-zOp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="IHc-sB-8nZ"/>
                             <constraint firstItem="WBe-W0-E1S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="NHo-Qj-gRX"/>
                             <constraint firstItem="OX9-dL-W0E" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="dwb-vA-baV"/>
@@ -62,9 +65,11 @@
                             <constraint firstItem="i9h-16-zOp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="22" id="ii6-rq-33R"/>
                             <constraint firstItem="WBe-W0-E1S" firstAttribute="top" secondItem="i9h-16-zOp" secondAttribute="bottom" constant="70.670000000000002" id="ofY-zx-6b7"/>
                             <constraint firstItem="DSZ-2q-uOY" firstAttribute="top" secondItem="OX9-dL-W0E" secondAttribute="bottom" constant="156" id="uk6-lq-lgB"/>
+                            <constraint firstItem="mrH-Ao-iyN" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="wCg-63-xC9"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="mrH-Ao-iyN" id="k7Z-p0-9Rb"/>
                         <outlet property="cityNameLabel" destination="DSZ-2q-uOY" id="zn7-ug-7Hk"/>
                         <outlet property="humidityLabel" destination="oCn-sU-bGn" id="IPg-05-qdI"/>
                         <outlet property="iconLabel" destination="OX9-dL-W0E" id="hdG-I8-IMo"/>

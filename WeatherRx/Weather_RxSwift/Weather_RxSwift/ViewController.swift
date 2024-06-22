@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var iconLabel: UILabel!
     @IBOutlet weak var cityNameLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     let bag = DisposeBag()
     
@@ -26,12 +27,12 @@ class ViewController: UIViewController {
         // flatMapLatest: 가장 최근에 생성한 Observable의 값만 받아 처리
         // share: Subscribe()할때마다 새로운 Observable 시퀀스가 생성되지 않고, 하나의 시퀀스에서 방출되는 아이템을 공유해 사용할 수 있습니다. (https://jusung.github.io/shareReplay/)
         
-        // search로 선언하면 모든 label의 값을 subscribe로 한번에 관리하는 것이 아니라 아래처럼 각 라벨별로 분리해서 관리가 가능하다. (코드가 길지 않아 가독성에도 좋음)
-        
-        let search = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        let searchInput = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
             .map { self.searchCityName.text }
             .filter { ($0 ?? "").count > 0 }
-            .flatMapLatest { text in
+        
+        // search로 선언하면 모든 label의 값을 subscribe로 한번에 관리하는 것이 아니라 아래처럼 각 라벨별로 분리해서 관리가 가능하다. (코드가 길지 않아 가독성에도 좋음)
+        let search = searchInput.flatMap { text in
                 return APIController.shared.currentWeather(city: text ?? "Error")
                     .catchAndReturn(APIController.Weather.empty)
             }
@@ -51,6 +52,35 @@ class ViewController: UIViewController {
         
         search.map { $0.cityName }
             .drive(cityNameLabel.rx.text)
+            .disposed(by: bag)
+        
+        let running = Observable.from([
+            searchInput.map { _ in true },
+            search.map { _ in false }.asObservable()
+        ])
+            .merge()
+            .startWith(true)
+            .asDriver(onErrorJustReturn: false)
+        
+        running
+            .skip(1)
+            .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: bag)
+        
+        running
+            .drive(temperatureLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(iconLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(humidityLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(cityNameLabel.rx.isHidden)
             .disposed(by: bag)
     }
     
